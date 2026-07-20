@@ -1,0 +1,19 @@
+# Compiled files
+*.class
+*.o
+*.exe
+
+# Python files
+__pycache__/
+*.pyc
+venv/
+
+# Node files
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log

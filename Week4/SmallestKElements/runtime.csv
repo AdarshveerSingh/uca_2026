@@ -1,0 +1,8 @@
+QuickSelect Runtime ( in ms ),
+DatasetSize,Runtime_ms
+100000,1.4
+200000,2.5
+400000,4.8
+800000,9.05
+1600000,18.3
+3200000,38.2

@@ -17,3 +17,7 @@ node_modules/
 
 # Logs
 *.log
+
+#Folders
+BEE_Project/
+BEE_Project_Beta/

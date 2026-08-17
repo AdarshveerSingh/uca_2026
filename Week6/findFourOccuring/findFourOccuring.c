@@ -34,5 +34,4 @@ int main(){
 
     printf("%d\n", findFourOccuring(arr, n));
 
-    return 0;
 }

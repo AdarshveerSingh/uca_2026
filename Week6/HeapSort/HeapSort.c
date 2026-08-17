@@ -2,48 +2,74 @@
 #include <string.h>
 #include <stdlib.h>
 
-void heapify(int arr[], int n, int i) {
+void swap(void *a, void *b, size_t size) {
+
+    void *temp = malloc(size);
+
+    memcpy(temp, a, size);
+    memcpy(a, b, size);
+    memcpy(b, temp, size);
+
+    free(temp);
+}
+
+void heapify(void *arr, int n, int i, size_t size,
+             int (*compare)(const void *, const void *)) {
 
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if (left < n && arr[left] > arr[largest])
+    void *base = arr;
+
+    if (left < n &&
+        compare((char *)base + left * size,
+                (char *)base + largest * size) > 0)
         largest = left;
 
-    if (right < n && arr[right] > arr[largest])
+    if (right < n &&
+        compare((char *)base + right * size,
+                (char *)base + largest * size) > 0)
         largest = right;
 
     if (largest != i) {
-        int temp = arr[i];
-        arr[i] = arr[largest];
-        arr[largest] = temp;
 
-        heapify(arr, n, largest);
+        swap((char *)base + i * size,
+             (char *)base + largest * size,
+             size);
+
+        heapify(arr, n, largest, size, compare);
     }
 }
 
-void heapSort(int arr[], int n) {
+void heapSort(void *arr, int n, size_t size,
+              int (*compare)(const void *, const void *)) {
 
     for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
+        heapify(arr, n, i, size, compare);
 
     for (int i = n - 1; i > 0; i--) {
-        
-        int temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
 
-        heapify(arr, i, 0);
+        swap((char *)arr,
+             (char *)arr + i * size,
+             size);
+
+        heapify(arr, i, 0, size, compare);
     }
 }
 
-void printArray(int arr[], int n) {
+int compareInt(const void *a, const void *b) {
 
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+    int x = *(int *)a;
+    int y = *(int *)b;
 
-    printf("\n");
+    if (x > y)
+        return 1;
+
+    if (x < y)
+        return -1;
+
+    return 0;
 }
 
 int main() {
@@ -51,13 +77,10 @@ int main() {
     int arr[] = {12, 11, 13, 5, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
 
-    printf("Before sorting: ");
-    printArray(arr, n);
+    heapSort(arr, n, sizeof(int), compareInt);
 
-    heapSort(arr, n);
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
 
-    printf("After sorting: ");
-    printArray(arr, n);
-
-    
+    return 0;
 }
